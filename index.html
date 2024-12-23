@@ -3,9 +3,106 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <script src="../tali-wind.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="../script-and-css-or-external-file/index.css"
+    />
+    <title>Jhalokati Expess</title>
+    <style></style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
-    <script src="index.js"></script>
+    <main>
+      <header>
+        <nav class="bg-orange-400 fixed top-0 left-0 w-full">
+          <div class="flex justify-between items-center px-8 py-2">
+            <div>
+              <img src="../image/logo.png" alt="" class="w-16 z-50 md:w-36" />
+            </div>
+            <div class="hidden md:flex">
+              <div class="text-white flex gap-10 font-bold">
+                <a href="">HOME</a>
+                <a href="">FOOD ANG GROCERY</a>
+                <a href="">QRIAR</a>
+                <a href="">SWRVICE</a>
+                <a href="">ABOUT</a>
+                <a href="">CONTACT</a>
+              </div>
+              <div></div>
+            </div>
+            <div class="block md:hidden">
+              <i>bar</i>
+            </div>
+          </div>
+          <div class="py-3 grid place-items-center w-[90%] mx-auto relative">
+            <input
+              type="search"
+              class="outline-none w-full rounded-full py-1 px-5 text-lg"
+              id="input"
+              placeholder="Search Your Food And Grocery.."
+            />
+            <div
+              class="uppercase h-3/5 cursor-pointer w-1/5 bg-yellow-300 absolute top-[50%] right-0 text-sm md:text-base rounded-r-full grid place-items-center"
+              style="transform: translate(0, -50%)"
+              id="searchBtn"
+            >
+              search
+            </div>
+          </div>
+        </nav>
+      </header>
+      <section
+        id="section"
+        class="px-1 md:px-5 pt-[7rem] md:pt-[10rem] grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4"
+      >
+        <div
+          class="flex food-and-grocery justify-between rounded-xl px-2 py-1 bg-slate-100"
+        >
+          <img
+            src="https://i.postimg.cc/8c5Qvrg6/tacos.jpg"
+            class="w-2/5 aspect-square rounded-xl"
+            alt=""
+          />
+          <div class="w-[55%] flex-col flex justify-around">
+            <div>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-red-600">500 $</p>
+              <p>⭐3.4 (500+)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!--  =================== script ================= -->
+    <!-- <script src="../script-and-css-or-external-file/basic-js-or-index.js"></script> -->
+    <!-- <script
+      type="module"
+      src="https://solaymanmollik.github.io/mywalton/product-data.js"
+    ></script> -->
+    <script
+      type="module"
+      src="../script-and-css-or-external-file/search.js"
+    ></script>
+
+    <!-- <script
+      type="module"
+      src="script-and-css-or-external-file/search.js"
+    ></script> -->
+    <script
+      type="module"
+      src="script-and-css-or-external-file/stheFileExportProductDataIdToOtherFileWhenUserClickAnyProDuct.js"
+    ></script>
   </body>
 </html>

@@ -1,64 +1,112 @@
-// Haversine Formula: দূরত্ব মাপার গণিত
-const getDis = (getLatitude, getLongitude) => {
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // পৃথিবীর ব্যাসার্ধ কিলোমিটারে
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+import * as data from "food-data.js";
+let productData = data.productList,
+  productKeyArr = data.keyArr;
 
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+/**
+ * make the div
+ * the function receved a filter of product
+ * note that the function only recived a arry of filter object
+ */
+const section = document.getElementById("section");
 
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // দূরত্ব কিলোমিটারে
+const makeDivFunction = (arr) => {
+  section.innerHTML = "";
+  localStorage.setItem("lastSearch", JSON.stringify(arr));
+
+  arr.forEach((x) => {
+    let desEng;
+    if (window.innerWidth < 600) {
+      desEng = x.item.desEng.substring(0, 70);
+    } else {
+      desEng = x.item.desEng.substring(0, 200);
+    }
+
+    let theContent = `
+  <img src="${
+    x.item.image.split("|")[0]
+  }" class="w-2/5 aspect-square rounded-xl" alt="" /><div class="w-[55%] flex-col flex justify-around"><div><p>${desEng} ${
+      desEng.length === 70 ? "..." : ""
+    } ${
+      desEng.length === 200 ? "..." : ""
+    }</p></div><div><p class="text-2xl font-bold text-red-600">${
+      x.item.price
+    } $</p><p>⭐${x.item.rate.split("/")[0]} (${
+      x.item.rate.split("/")[1]
+    }+)</p></div></div>
+  
+          `;
+    let newDiv = document.createElement("div");
+    newDiv.classList.add(
+      "food-and-grocery",
+      "flex",
+      "justify-between",
+      "rounded-xl",
+      "px-2",
+      "py-1",
+      "bg-slate-100"
+    );
+    newDiv.innerHTML = theContent;
+
+    section.appendChild(newDiv);
+  });
+  //  the content make and set
+
+  // if media is mobile
+  if (window.innerWidth < 600) {
+    let classList = document.querySelectorAll(".food-and-grocery");
+    let count = 0;
+    classList.forEach((x) => {
+      count++;
+      if (count % 2 === 0) {
+        x.classList.add("flex-row-reverse");
+      }
+    });
   }
-
-  // আপনার বর্তমান অবস্থান থেকে গন্তব্য পর্যন্ত দূরত্ব বের করুন
-  const myLatitude = 22.6395; // আপনার Latitude (যেমন: ঝালকাঠির)
-  const myLongitude = 90.211; // আপনার Longitude
-  const targetLatitude = getLatitude; // গন্তব্যের Latitude
-  const targetLongitude = getLongitude; // গন্তব্যের Longitude
-
-  const distance = calculateDistance(
-    myLatitude,
-    myLongitude,
-    targetLatitude,
-    targetLongitude
-  );
-  document.write(`Distance: ${distance.toFixed(2)} km`);
 };
 
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const accuracy = position.coords.accuracy; // মিটার ইউনিটে নির্ভুলতা
+/**
+ * the search methood start here
+ */
+/**
+ * It is the main main search function
+ * it made by fuse.js
+ */
+const mainSearchFunction = (key) => {
+  let options = {
+    keys: ["desEng", "desBangla", "category", "keyword"],
+    threshold: 0.5,
+  };
+  const fuse = new Fuse(productData, options);
+  return fuse.search(key);
+};
+// it works for filter key
+const keySearchFunction = (key) => {
+  let options = {
+    threshold: 0.7,
+  };
+  const fuse = new Fuse(productKeyArr, options);
+  return fuse.search(key);
+};
 
-      document.write(`Latitude: ${latitude}, Longitude: ${longitude}`);
-      document.write(`Accuracy: ${accuracy} meters`);
-
-      getDis(latitude, longitude);
-    },
-    (error) => {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          console.error("ব্যবহারকারী লোকেশন অনুমতি দেননি।");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          console.error("লোকেশন তথ্য পাওয়া যাচ্ছে না।");
-          break;
-        case error.TIMEOUT:
-          console.error("লোকেশন রিকোয়েস্ট টাইমআউট হয়েছে।");
-          break;
-        default:
-          console.error("অজানা ত্রুটি:", error.message);
-      }
-    }
-  );
-} else {
-  console.log("Geolocation API আপনার ব্রাউজারে সাপোর্ট করে না।");
+// get search input
+let input = document.getElementById("input");
+input.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    let arr = mainSearchFunction(input.value);
+    makeDivFunction(arr);
+  }
+});
+// on search
+input.addEventListener("search", (e) => {
+  let arr = mainSearchFunction(input.value);
+  makeDivFunction(arr);
+});
+// on click search btn
+document.getElementById("searchBtn").addEventListener("click", () => {
+  let arr = mainSearchFunction(input.value);
+  makeDivFunction(arr);
+});
+// last search
+if (localStorage.getItem("lastSearch")) {
+  makeDivFunction(JSON.parse(localStorage.getItem("lastSearch")));
 }
